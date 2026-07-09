@@ -5,9 +5,6 @@ import MarqueeBackground from "./components/MarqueeBackground.jsx";
 import { PageOne, PageTwo } from "./components/CVSections.jsx";
 
 const PAGES = [PageOne, PageTwo];
-
-// Framer variants for the "turning a page" feel: the outgoing page rotates away
-// on its left edge, the incoming page rotates in. `custom` = flip direction.
 const flipVariants = {
   enter: (dir) => ({
     rotateY: dir > 0 ? -75 : 75,

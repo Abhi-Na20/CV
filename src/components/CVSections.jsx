@@ -1,5 +1,5 @@
 // Small presentational building blocks shared by both CV pages, plus the two
-// page bodies (PageOne / PageTwo). Kept in one file so the CV lives together.
+// Kept in one file so the CV lives together.
 import {
   summary,
   skills,
@@ -19,7 +19,7 @@ function Section({ title, children }) {
   );
 }
 
-// A dated entry: timeline column on the left, content on the right.
+// A dated entry timeline column on the left, content on the right.
 function Entry({ period, location, org, role, detail, bullets }) {
   return (
     <div className="entry">
