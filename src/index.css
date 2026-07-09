@@ -1,6 +1,4 @@
-/* ============================================================
-   Theme tokens
-   ============================================================ */
+/* Theme tokens */
 :root {
   --bg: #0a0b0f;
   --bg-elev: #121420;
@@ -34,9 +32,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* ============================================================
-   App shell + layered background glow
-   ============================================================ */
+  /* App shell + layered background glow */
 .app {
   position: relative;
   min-height: 100vh;
@@ -56,9 +52,7 @@ body {
     var(--bg);
 }
 
-/* ============================================================
-   Drifting marquee background
-   ============================================================ */
+/* Drifting marquee background*/
 .marquee {
   position: fixed;
   inset: 0;
@@ -108,9 +102,7 @@ body {
   }
 }
 
-/* ============================================================
-   Content column
-   ============================================================ */
+/* Content column */
 .content {
   position: relative;
   z-index: 1;
@@ -186,9 +178,7 @@ body {
   background: var(--accent);
 }
 
-/* ============================================================
-   Paper (the flipping CV page)
-   ============================================================ */
+/* Paper (the flipping CV page) */
 .paper-stage {
   perspective: 1800px; /* gives the flip real depth */
 }
@@ -220,9 +210,7 @@ body {
   color: var(--text-faint);
 }
 
-/* ============================================================
-   Sections + entries
-   ============================================================ */
+/* Sections + entries */
 .section {
   margin-bottom: 2.4rem;
 }
@@ -394,9 +382,7 @@ body {
   font-size: 0.85rem;
 }
 
-/* ============================================================
-   Pager controls
-   ============================================================ */
+/* Pager controls */
 .pager {
   margin-top: 1.8rem;
   display: flex;
@@ -456,9 +442,7 @@ body {
   box-shadow: 0 0 0 4px var(--accent-soft);
 }
 
-/* ============================================================
-   Responsive
-   ============================================================ */
+/* Responsive */
 @media (max-width: 640px) {
   .skill,
   .entry {
