@@ -28,8 +28,8 @@ export const skills = [
     items: "Pandas, NumPy, Data Preprocessing, Data Structures, Data Science",
   },
   {
-    label: "HTML/CSS/JavaScript/Bootstrap",
-    items: "Bootstrap, JSON, PHP",
+    label: "Web Fundamentals",
+    items: "HTML, CSS, JavaScript, Bootstrap, JSON, PHP",
   },
   {
     label: "SQL",
