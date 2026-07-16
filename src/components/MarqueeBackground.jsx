@@ -1,8 +1,6 @@
-// Subtle drifting text behind the CV. Pure CSS animation (see index.css) so it
-// stays cheap and never competes with the readable foreground.
-const PHRASE = "ABHINAV NALATWAD · SOFTWARE ENGINEER · ";
+const PHRASE = "ABHINAV NALATWAD   ";
 
-const ROWS = 7;
+const ROWS = 6;
 
 export default function MarqueeBackground() {
   return (
@@ -13,12 +11,12 @@ export default function MarqueeBackground() {
           className="marquee__row"
           // alternate direction + vary speed per row for an organic drift
           style={{
-            animationDuration: `${38 + row * 6}s`,
+            animationDuration: `${45 + row * 8}s`,
             animationDirection: row % 2 === 0 ? "normal" : "reverse",
           }}
         >
-          <span>{PHRASE.repeat(8)}</span>
-          <span>{PHRASE.repeat(8)}</span>
+          <span>{PHRASE.repeat(5)}</span>
+          <span>{PHRASE.repeat(5)}</span>
         </div>
       ))}
     </div>

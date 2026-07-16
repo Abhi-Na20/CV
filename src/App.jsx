@@ -1,36 +1,24 @@
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import Header from "./components/Header.jsx";
 import MarqueeBackground from "./components/MarqueeBackground.jsx";
-import { PageOne, PageTwo } from "./components/CVSections.jsx";
+import PdfViewer from "./components/PdfViewer.jsx";
 
-const PAGES = [PageOne, PageTwo];
-const flipVariants = {
-  enter: (dir) => ({
-    rotateY: dir > 0 ? -75 : 75,
-    opacity: 0,
-    x: dir > 0 ? 60 : -60,
-  }),
-  center: { rotateY: 0, opacity: 1, x: 0 },
-  exit: (dir) => ({
-    rotateY: dir > 0 ? 75 : -75,
-    opacity: 0,
-    x: dir > 0 ? -60 : 60,
-  }),
-};
+// lives in /public — same file the Download button in the header points at
+const CV_FILE = "/ABHINAV_NALATWAD_CV.pdf";
 
 export default function App() {
-  const [page, setPage] = useState(0);
+  // pdf.js counts pages from 1, so no zero-indexing games here
+  const [pageNumber, setPageNumber] = useState(1);
   const [dir, setDir] = useState(1);
+  // don't hardcode 2 pages — the PDF tells us once it loads
+  const [numPages, setNumPages] = useState(null);
 
   const go = (next) => {
-    if (next === page) return;
-    setDir(next > page ? 1 : -1);
-    setPage(next);
+    if (next === pageNumber || next < 1 || next > numPages) return;
+    setDir(next > pageNumber ? 1 : -1);
+    setPageNumber(next);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
-  const CurrentPage = PAGES[page];
 
   return (
     <div className="app">
@@ -40,58 +28,49 @@ export default function App() {
         <Header />
 
         <div className="paper-stage">
-          <AnimatePresence mode="wait" custom={dir}>
-            <motion.article
-              key={page}
-              className="paper"
-              custom={dir}
-              variants={flipVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          <PdfViewer
+            file={CV_FILE}
+            pageNumber={pageNumber}
+            dir={dir}
+            onLoaded={setNumPages}
+          />
+        </div>
+
+        {/* only show the pager once we actually know the page count */}
+        {numPages && (
+          <div className="pager">
+            <button
+              className="pager__btn"
+              onClick={() => go(pageNumber - 1)}
+              disabled={pageNumber === 1}
+              aria-label="Previous page"
             >
-              <CurrentPage />
-              <footer className="paper__footer">
-                <span>Abhinav Nalatwad</span>
-                <span>
-                  {page + 1} / {PAGES.length}
-                </span>
-              </footer>
-            </motion.article>
-          </AnimatePresence>
-        </div>
+              ← Previous
+            </button>
 
-        <div className="pager">
-          <button
-            className="pager__btn"
-            onClick={() => go(page - 1)}
-            disabled={page === 0}
-            aria-label="Previous page"
-          >
-            ← Previous
-          </button>
+            <div className="pager__dots">
+              {Array.from({ length: numPages }).map((_, i) => (
+                <button
+                  key={i}
+                  className={
+                    "pager__dot" + (i + 1 === pageNumber ? " is-active" : "")
+                  }
+                  onClick={() => go(i + 1)}
+                  aria-label={`Go to page ${i + 1}`}
+                />
+              ))}
+            </div>
 
-          <div className="pager__dots">
-            {PAGES.map((_, i) => (
-              <button
-                key={i}
-                className={"pager__dot" + (i === page ? " is-active" : "")}
-                onClick={() => go(i)}
-                aria-label={`Go to page ${i + 1}`}
-              />
-            ))}
+            <button
+              className="pager__btn"
+              onClick={() => go(pageNumber + 1)}
+              disabled={pageNumber === numPages}
+              aria-label="Next page"
+            >
+              Turn page →
+            </button>
           </div>
-
-          <button
-            className="pager__btn"
-            onClick={() => go(page + 1)}
-            disabled={page === PAGES.length - 1}
-            aria-label="Next page"
-          >
-            Turn page →
-          </button>
-        </div>
+        )}
       </main>
     </div>
   );

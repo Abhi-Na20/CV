@@ -1,7 +1,6 @@
 /* Theme tokens */
 :root {
   --bg: #0a0b0f;
-  --bg-elev: #121420;
   --paper: rgba(20, 22, 32, 0.72);
   --paper-border: rgba(255, 255, 255, 0.08);
   --text: #f2f3f7;
@@ -62,15 +61,16 @@ body {
   justify-content: space-around;
   overflow: hidden;
   pointer-events: none;
+  /* gently dim the drift behind the CV card so it never fights the foreground */
   -webkit-mask-image: radial-gradient(
     ellipse 75% 70% at 50% 45%,
-    transparent 35%,
-    #000 90%
+    rgba(0, 0, 0, 0.5) 35%,
+    #000 85%
   );
   mask-image: radial-gradient(
     ellipse 75% 70% at 50% 45%,
-    transparent 35%,
-    #000 90%
+    rgba(0, 0, 0, 0.5) 35%,
+    #000 85%
   );
 }
 
@@ -86,10 +86,11 @@ body {
 .marquee__row span {
   font-family: var(--display);
   font-weight: 800;
-  font-size: clamp(2.2rem, 6vw, 4.5rem);
-  letter-spacing: 0.06em;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.05);
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  /* solid faint fill — an outline stroke at low opacity looks scratchy */
+  color: rgba(255, 255, 255, 0.045);
   padding-right: 0.4em;
 }
 
@@ -198,188 +199,35 @@ body {
   -webkit-backdrop-filter: blur(14px);
 }
 
-.paper__footer {
-  margin-top: 2.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--paper-border);
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.78rem;
+/* ---- PDF viewer variant of the paper card ---- */
+.paper--pdf {
+  /* the PDF page already has its own margins baked in, so the card
+     just needs a thin frame around the canvas */
+  padding: clamp(0.6rem, 1.5vw, 1rem);
+}
+
+.pdf-page {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.pdf-page canvas {
+  /* pdf.js sets an exact pixel size; stretch it to the frame so a mid-resize
+     canvas doesn't overflow the card before the re-measure kicks in */
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+  border-radius: 10px; /* soften corners so the white page sits nicely in the dark card */
+}
+
+.pdf-loading {
+  min-height: 60vh; /* keeps the card from collapsing to a sliver while loading */
+  display: grid;
+  place-items: center;
+  color: var(--text-faint);
+  font-size: 0.9rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-faint);
-}
-
-/* Sections + entries */
-.section {
-  margin-bottom: 2.4rem;
-}
-.section:last-of-type {
-  margin-bottom: 0;
-}
-
-.section__title {
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 0.82rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--accent);
-  padding-bottom: 0.55rem;
-  margin-bottom: 1.2rem;
-  border-bottom: 1px solid var(--paper-border);
-}
-
-.profile-text {
-  color: var(--text-dim);
-  line-height: 1.7;
-  font-size: 0.98rem;
-}
-
-/* ---- Skills ---- */
-.skills {
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-}
-
-.skill {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 1.5rem;
-  align-items: baseline;
-}
-
-.skill__label {
-  font-weight: 600;
-  color: var(--text);
-  font-size: 0.92rem;
-}
-
-.skill__items {
-  color: var(--text-dim);
-  font-size: 0.9rem;
-  line-height: 1.7;
-}
-
-/* ---- Timeline entries ---- */
-.entry {
-  display: grid;
-  grid-template-columns: 170px 1fr;
-  gap: 1.2rem;
-  padding: 0.9rem 0.9rem 0.9rem 0.9rem;
-  margin: 0 -0.9rem 0.6rem;
-  border: 1px solid transparent;
-  border-radius: 12px;
-  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease,
-    box-shadow 0.2s ease;
-}
-.entry:hover {
-  transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.02);
-  border-color: var(--paper-border);
-  box-shadow: 0 10px 30px -18px rgba(124, 156, 255, 0.5);
-}
-.entry:last-child {
-  margin-bottom: 0;
-}
-
-.entry__meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.entry__period {
-  font-weight: 600;
-  color: var(--text);
-  font-size: 0.85rem;
-}
-
-.entry__location {
-  color: var(--text-faint);
-  font-size: 0.8rem;
-}
-
-.entry__org {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 0.2rem;
-}
-
-.entry__role {
-  font-weight: 500;
-  color: var(--accent);
-}
-
-.entry__detail {
-  color: var(--text-dim);
-  font-size: 0.9rem;
-  line-height: 1.6;
-}
-
-.entry__bullets {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-  margin-top: 0.4rem;
-}
-
-.entry__bullets li {
-  position: relative;
-  padding-left: 1.1rem;
-  color: var(--text-dim);
-  font-size: 0.9rem;
-  line-height: 1.55;
-}
-
-.entry__bullets li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.6em;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent);
-}
-
-/* ---- References ---- */
-.references {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.reference {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  padding: 0.7rem 0.9rem;
-  margin: 0 -0.9rem;
-  border: 1px solid transparent;
-  border-radius: 12px;
-  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-}
-.reference:hover {
-  transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.02);
-  border-color: var(--paper-border);
-}
-
-.reference__name {
-  font-weight: 600;
-  color: var(--text);
-}
-.reference__title {
-  color: var(--text-dim);
-  font-size: 0.9rem;
-}
-.reference__contact {
-  color: var(--text-faint);
-  font-size: 0.85rem;
 }
 
 /* Pager controls */
@@ -444,26 +292,11 @@ body {
 
 /* Responsive */
 @media (max-width: 640px) {
-  .skill,
-  .entry {
-    grid-template-columns: 1fr;
-    gap: 0.35rem;
-  }
-
-  .entry__meta {
-    flex-direction: row;
-    gap: 0.6rem;
-    align-items: baseline;
-  }
-
   .pager {
     flex-wrap: wrap;
   }
 }
 
-/* Respect reduced-motion: kill the drift + flip distances */
-@media (prefers-reduced-motion: reduce) {
-  .marquee__row {
-    animation: none;
-  }
-}
+/* note: used to pause the marquee under prefers-reduced-motion, but Windows
+   reports that whenever "Animation effects" is off and the drift silently
+   froze — it's slow enough to keep on always */
