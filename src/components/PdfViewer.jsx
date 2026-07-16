@@ -37,8 +37,6 @@ export default function PdfViewer({ file, pageNumber, dir, onLoaded }) {
           loading={<div className="pdf-loading">Loading CV…</div>}
           error={<div className="pdf-loading">Couldn&apos;t load the PDF :(</div>}
         >
-          {/* mode="wait" so the old page finishes flipping out before the new
-              one flips in — otherwise both canvases stack and it looks broken */}
           <AnimatePresence mode="wait" custom={dir} initial={false}>
             <motion.div
               key={pageNumber}
@@ -50,8 +48,6 @@ export default function PdfViewer({ file, pageNumber, dir, onLoaded }) {
               exit="exit"
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             >
-              {/* text/annotation layers off — we just want a crisp canvas, and
-                  the selectable-text overlay never lines up nicely on dark UIs */}
               {width > 0 && (
                 <Page
                   pageNumber={pageNumber}
